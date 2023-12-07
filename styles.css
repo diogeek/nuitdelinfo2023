@@ -1,0 +1,29 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    overflow: hidden;
+}
+
+.container {
+    display: flex;
+    width: 200%;
+    transition: transform 0.5s ease-in-out;
+}
+
+.page {
+    width: 50%;
+    box-sizing: border-box;
+    padding: 20px;
+    text-align: center;
+}
+
+.page-left {
+    background-color: #3498db;
+    color: #fff;
+}
+
+.page-right {
+    background-color: #e74c3c;
+    color: #fff;
+    transform: translateX(0%);
+}
