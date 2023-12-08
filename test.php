@@ -3,85 +3,72 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>jQuery UI Droppable - Positioning</title>
+  <title>Eco Quest</title>
 
   <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
-  <style>
-
-    .draggable { 
-      width: 100px; height: 100px; padding: 5em; 
-
-      position: absolute; 
-    }
-    .droppable { 
-      width: 150px; height: 150px; padding: 0.5em;
-      position: absolute; 
-    }
-    #droppable-true { right: 10px; top: 10px; } 
-    #droppable-false { left: 10px; top: 10px; } 
-    img { max-width: 100%; height: auto; }
-  </style>
+  <link rel="stylesheet" href="assets/test.css">
 </head>
 <body>
+<!--<button onclick="transitionToRight()">Page Suivante</button>-->
+<div class="score">
+<p>Score bons: <span id="score-true">0</span></p>
+<p>Score mauvais: <span id="score-false">0</span></p>
+<p>1 = Un</p>
 
-<div class="draggable-container">
-<?php
-
-$pdo = new PDO('mysql:host=localhost;dbname=test12', 'root', '');
-
-
-$sql = "SELECT * FROM `1`";
-$stmt = $pdo->query($sql);
-
-$top = 0; 
-while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-    echo '<div class="draggable ui-widget-content" style="top: '.$top.'px;" data-value="'.$row['résultat'].'">';
-    echo '<img src="'.$row['lien'].'" alt="Image" />';
-    echo '</div>';
-    $top += 10; 
-}
-?>
 </div>
-
+<div class="folder">
+<img src="assets/img/folder.png" >
+</div>
 <div id="droppable-true" class="droppable ui-widget-header">
-  <p>Drop True (1) here</p>
+  <p>VRAIE</p>
 </div>
 
 <div id="droppable-false" class="droppable ui-widget-header">
-  <p>Drop False (0) here</p>
+  <p>FAUX</p>
+</div>
+
+<img class="titre2" src="assets/img/titre2.png" >
+
+<a href="feuille.php" target="blank_"><button class="btn" >Documentation</button></a>
+
+<div class="draggable-container">
+<?php
+session_start();
+$pdo = new PDO('mysql:host=localhost;dbname=test12', 'root', '');
+ 
+ 
+$sql = "SELECT * FROM `1`";
+$stmt = $pdo->query($sql);
+ 
+// Mettre le contenu du PDOStatement dans un tableau
+$top = 0;
+$i = 0;
+while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+    $tabl[$i][0] = $row['Texte'];
+    $tabl[$i][1] = $row['résultat'];
+//    echo '<div class="draggable ui-widget-content" style="top: '.$top.'px;" data-value="'.$row['résultat'].'">';
+//    echo htmlspecialchars($row['Texte']);
+//    echo '</div>';
+//    $top += 10;
+    $i++;
+}
+ 
+// Mélanger le tableau
+shuffle($tabl);
+ 
+// Afficher les n 1eres lignes du tableau
+for ($i=1;$i<=17;$i++) {
+  echo '<div class="draggable ui-widget-content" style="top: '.$top.'px;" data-value="'.$tabl[$i][1].'">';
+  echo htmlspecialchars($tabl[$i][0]);
+  echo '</div>';
+  $top += 10;
+}
+ 
+?>
 </div>
 
 <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
 <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
-<script>
-$(function() {
-  $(".draggable").draggable();
-  
-  function handleDrop(event, ui, expectedValue) {
-    var value = ui.draggable.data("value");
-    var $this = $(this);
-
-    if (value === expectedValue) {
-      $this.addClass("ui-state-highlight").css('background-color', 'green');
-    } else {
-      $this.addClass("ui-state-error").css('background-color', 'red');
-    }
-    $this.find("p").html("Dropped! Value: " + value);
-  }
-
-  $("#droppable-true").droppable({
-    drop: function(event, ui) {
-      handleDrop.call(this, event, ui, 1);
-    }
-  });
-
-  $("#droppable-false").droppable({
-    drop: function(event, ui) {
-      handleDrop.call(this, event, ui, 0);
-    }
-  });
-});
-</script>
-
+<script src="assets/test.js"></script>
 </body>
 </html>
